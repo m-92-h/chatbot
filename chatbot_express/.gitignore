@@ -1,0 +1,8 @@
+node_modules
+dist/
+
+/generated/prisma
+
+.local_vector_db/
+
+.env*

@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    // Target
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+
+    // Output
+    "outDir": "./dist",
+    "rootDir": ".",
+
+    // Strictness — يكتشف الأخطاء قبل التشغيل
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
+    // Interop
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+
+    // Helpers
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // Source Maps للـ debugging
+    "sourceMap": true,
+    "declaration": true
+  },
+  "include": ["server.ts", "src/**/*", "scripts/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

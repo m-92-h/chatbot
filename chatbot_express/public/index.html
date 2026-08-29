@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatbot</title>
+    <style>
+      :root[data-theme="light"] {
+        --bg-color: #f4f6f9;
+        --card-bg: #ffffff;
+        --text-color: #1e293b;
+        --border-color: #e2e8f0;
+        --chat-user-bg: #2563eb;
+        --chat-user-text: #ffffff;
+        --chat-bot-bg: #f1f5f9;
+        --chat-bot-text: #0f172a;
+      }
+      :root[data-theme="dark"] {
+        --bg-color: #0f172a;
+        --card-bg: #1e293b;
+        --text-color: #f8fafc;
+        --border-color: #334155;
+        --chat-user-bg: #3b82f6;
+        --chat-user-text: #ffffff;
+        --chat-bot-bg: #334155;
+        --chat-bot-text: #f8fafc;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        transition:
+          background-color 0.3s,
+          color 0.3s;
+      }
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+      }
+      .chat-container {
+        width: 100%;
+        max-width: 720px;
+        height: 90vh;
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      }
+      .chat-header {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .chat-header h2 {
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+      .theme-btn {
+        background: transparent;
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+        padding: 6px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+      .chat-messages {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .msg {
+        max-width: 80%;
+        padding: 10px 14px;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+      .msg.user {
+        align-self: flex-start;
+        background-color: var(--chat-user-bg);
+        color: var(--chat-user-text);
+        border-bottom-right-radius: 2px;
+      }
+      .msg.bot {
+        align-self: flex-end;
+        background-color: var(--chat-bot-bg);
+        color: var(--chat-bot-text);
+        border-bottom-left-radius: 2px;
+      }
+      .chat-input-area {
+        padding: 16px;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        gap: 8px;
+      }
+      .chat-input-area input {
+        flex: 1;
+        padding: 10px 14px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        outline: none;
+      }
+      .chat-input-area button {
+        padding: 10px 20px;
+        background-color: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .msg.bot strong {
+        font-weight: 700;
+      }
+      .msg.bot em {
+        font-style: italic;
+      }
+      .msg.bot ul,
+      .msg.bot ol {
+        margin: 8px 0;
+        padding-inline-start: 20px;
+      }
+      .msg.bot li {
+        margin-bottom: 4px;
+      }
+      .msg.bot h1,
+      .msg.bot h2,
+      .msg.bot h3 {
+        margin: 10px 0 6px;
+        font-weight: 700;
+      }
+      .msg.bot p {
+        margin-bottom: 8px;
+      }
+      .msg.bot p:last-child {
+        margin-bottom: 0;
+      }
+      .msg.bot code {
+        background: rgba(0, 0, 0, 0.08);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 0.9em;
+      }
+      .msg.bot pre {
+        background: rgba(0, 0, 0, 0.08);
+        padding: 10px;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 8px 0;
+      }
+      .msg.bot pre code {
+        background: none;
+        padding: 0;
+      }
+      .msg.bot a {
+        color: var(--chat-user-bg);
+        text-decoration: underline;
+      }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.0/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.9/purify.min.js"></script>
+  </head>
+  <body>
+    <div class="chat-container">
+      <div class="chat-header">
+        <h2>🤖 المساعد الذكي</h2>
+        <button class="theme-btn" id="themeToggleBtn">الوضع الداكن 🌙</button>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="msg bot">مرحباً بك! كيف يمكنني مساعدتك اليوم؟ يمكنني الإجابة عن أسئلتك أو تغيير مظهر الموقع إن أردت.</div>
+      </div>
+      <form class="chat-input-area" id="chatForm">
+        <input type="text" id="userInput" placeholder="اكتب سؤالك هنا..." autocomplete="off" required />
+        <button type="submit">إرسال</button>
+      </form>
+    </div>
+
+    <script>
+      const htmlEl = document.documentElement;
+      const themeBtn = document.getElementById("themeToggleBtn");
+      const chatForm = document.getElementById("chatForm");
+      const userInput = document.getElementById("userInput");
+      const chatMsgs = document.getElementById("chatMessages");
+
+      // الثيم
+      function setTheme(mode) {
+        if (mode === "toggle") {
+          mode = htmlEl.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        }
+        htmlEl.setAttribute("data-theme", mode);
+        themeBtn.textContent = mode === "dark" ? "الوضع المشرق ☀️" : "الوضع الداكن 🌙";
+      }
+      themeBtn.addEventListener("click", () => setTheme("toggle"));
+
+      // الفقاعات
+      function appendMessage(text, sender) {
+        const d = document.createElement("div");
+        d.className = `msg ${sender}`;
+        d.textContent = text;
+        chatMsgs.appendChild(d);
+        chatMsgs.scrollTop = chatMsgs.scrollHeight;
+        return d;
+      }
+
+      function setInputEnabled(enabled) {
+        userInput.disabled = !enabled;
+        chatForm.querySelector("button").disabled = !enabled;
+      }
+
+      // إرسال الرسالة وقراءة SSE
+      chatForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const text = userInput.value.trim();
+        if (!text) return;
+
+        appendMessage(text, "user");
+        userInput.value = "";
+        setInputEnabled(false);
+
+        // فقاعة الرد — تبدأ بنقاط الانتظار
+        const botBubble = appendMessage("...", "bot");
+        let replyText = "";
+
+        try {
+          const res = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: text }),
+          });
+
+          if (!res.ok || !res.body) {
+            botBubble.textContent = "حدث خطأ أثناء الاتصال بالخادم.";
+            return;
+          }
+
+          // قراءة SSE يدوياً عبر ReadableStream
+          // لا نستخدم EventSource لأنه لا يدعم POST
+          // نقرأ الـ stream كنص ونُحلّل سطور SSE يدوياً
+          const reader = res.body.getReader();
+          const decoder = new TextDecoder("utf-8");
+          let buffer = "";
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split("\n");
+            buffer = lines.pop() ?? "";
+
+            for (const line of lines) {
+              if (!line.startsWith("data: ")) continue;
+
+              let event;
+              try {
+                event = JSON.parse(line.slice(6));
+              } catch {
+                continue;
+              }
+
+              if (event.type === "chunk") {
+                replyText += event.text;
+                botBubble.innerHTML = DOMPurify.sanitize(marked.parse(replyText));
+                chatMsgs.scrollTop = chatMsgs.scrollHeight;
+              } else if (event.type === "theme") {
+                setTheme(event.value);
+              } else if (event.type === "error") {
+                botBubble.textContent = event.text;
+              } else if (event.type === "done") {
+                if (!replyText.trim()) {
+                  botBubble.textContent = "لم يتم استلام رد من الخادم.";
+                }
+              }
+            }
+          }
+        } catch (err) {
+          console.error("[Chat] SSE error:", err);
+          botBubble.textContent = "حدث خطأ أثناء الاتصال بالخادم.";
+        } finally {
+          setInputEnabled(true);
+          userInput.focus();
+        }
+      });
+    </script>
+  </body>
+</html>

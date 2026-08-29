@@ -1,0 +1,39 @@
+{
+  "name": "agent_docker",
+  "version": "1.0.0",
+  "description": "",
+  "author": {
+    "name": "Mohamed Hussein",
+    "email": "mohamed.h92t@gmail.com"
+  },
+  "main": "dist/server.js",
+  "license": "ISC",
+  "type": "module",
+  "scripts": {
+    "start": "node dist/server.js",
+    "build": "prisma generate && tsc",
+    "dev": "tsx watch --env-file=.env src/server.ts",
+    "seed": "tsx --env-file=.env src/rag/seed.ts"
+  },
+  "dependencies": {
+    "@google/genai": "^2.18.0",
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "@prisma/adapter-pg": "^7.9.1",
+    "@prisma/client": "^7.9.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "pg": "^8.23.0",
+    "pgvector": "^0.3.0",
+    "prisma": "^7.9.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.3.0",
+    "@types/pg": "^8.23.1",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2"
+  }
+}

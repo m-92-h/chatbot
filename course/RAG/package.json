@@ -1,0 +1,30 @@
+{
+  "name": "RAG",
+  "version": "1.0.0",
+  "description": "RAG Agent API with TypeScript",
+  "license": "ISC",
+  "author": {
+    "name": "Mohamed_Hussein",
+    "email": "mohamed.h92t@gmail.com"
+  },
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node --env-file=.env dist/server.js",
+    "dev": "tsx watch --env-file=.env server.ts",
+    "build:embeddings": "tsx --env-file=.env scripts/generateEmbeddings.ts"
+  },
+  "dependencies": {
+    "@google/genai": "^2.17.1",
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.2.0",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2"
+  }
+}

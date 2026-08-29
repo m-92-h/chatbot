@@ -1,0 +1,22 @@
+[
+    {
+        "question": "What is the capital of France?",
+        "answer": "The capital of France is Paris."
+    },
+    {
+        "question": "What is the largest planet in our solar system?",
+        "answer": "The largest planet in our solar system is Jupiter."
+    },
+    {
+        "question": "Who wrote 'To Kill a Mockingbird'?",
+        "answer": "'To Kill a Mockingbird' was written by Harper Lee."
+    },
+    {
+        "question": "What is Docker?",
+        "answer": "Docker is a platform that allows developers to automate the deployment of applications inside lightweight, portable containers."
+    },
+    {
+        "question": "What is js?",
+        "answer": "JS stands for JavaScript."
+    }
+] 

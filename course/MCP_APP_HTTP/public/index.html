@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>MCP Chatbot</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        background: #0f172a;
+        color: #f8fafc;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 700px;
+        margin: 0 auto;
+      }
+      .chat-box {
+        background: #1e293b;
+        border-radius: 8px;
+        padding: 15px;
+        height: 400px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .msg {
+        padding: 10px 14px;
+        border-radius: 6px;
+        max-width: 80%;
+      }
+      .user {
+        background: #2563eb;
+        align-self: flex-start;
+      }
+      .bot {
+        background: #334155;
+        align-self: flex-end;
+      }
+      .tool-info {
+        background: #0284c7;
+        font-size: 0.8em;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin-bottom: 4px;
+      }
+      .input-box {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      input {
+        flex: 1;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #475569;
+        background: #0f172a;
+        color: white;
+      }
+      button {
+        padding: 10px 20px;
+        background: #10b981;
+        border: none;
+        border-radius: 6px;
+        color: white;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>MCP Protocol</h2>
+      <div class="chat-box" id="chat"></div>
+      <div class="input-box">
+        <input type="text" id="userInput" placeholder="اسأل عن الوقت، أو احسب الـ BMI (وزني 75 وطولي 1.75)..." />
+        <button onclick="sendMessage()">إرسال</button>
+      </div>
+    </div>
+
+    <script>
+      async function sendMessage() {
+        const input = document.getElementById("userInput");
+        const chat = document.getElementById("chat");
+        const text = input.value.trim();
+        if (!text) return;
+
+        chat.innerHTML += `<div class="msg user">${text}</div>`;
+        input.value = "";
+        chat.scrollTop = chat.scrollHeight;
+
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text }),
+        });
+        const data = await res.json();
+
+        let botHtml = `<div class="msg bot">`;
+        if (data.toolUsed) {
+          botHtml += `<div class="tool-info">🔧 تم استدعاء MCP Tool: ${data.toolUsed}</div>`;
+        }
+        botHtml += `${data.reply || data.error}</div>`;
+
+        chat.innerHTML += botHtml;
+        chat.scrollTop = chat.scrollHeight;
+      }
+    </script>
+  </body>
+</html>

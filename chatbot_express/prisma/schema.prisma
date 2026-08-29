@@ -1,0 +1,20 @@
+generator client {
+  provider        = "prisma-client"
+  output          = "../src/generated/prisma"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  extensions = [vector]
+}
+
+model DocumentChunk {
+  id        String   @id @default(uuid())
+  question  String   @db.Text
+  answer    String   @db.Text
+  embedding Unsupported("vector(768)")?
+  createdAt DateTime @default(now())
+
+  @@map("document_chunks")
+}
